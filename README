@@ -1,0 +1,19 @@
+COMPILATION
+
+  Pour compiler le programme, il faut executer la commande suivante à la racine du tp:
+    make
+
+  Pour nettoyer les fichiers générés pendant la compilation, il faut executer la commande suivante à la racine du tp:
+    make clean
+
+EXECUTION
+
+  Pour executer le programme, il faut executer la commande suivante :
+    ./image
+
+DOCUMENTATION
+
+  Pour générer la documentation doxygen, il faut executer la commande suivante à la racine du tp:
+    make doc
+
+  Pour visualiser la documentaion, il faut ouvrir dans un navigateur, le fichier "doc/html/index.html"
