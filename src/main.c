@@ -7,6 +7,7 @@
 */
 
 #include "image.h"
+#include "saisie.h"
 
 /*!
 \fn int main ( int argc, char∗∗ argv )
@@ -27,6 +28,9 @@ int main (int argc, char** argv){
   int int_aDonneNomEntree; //boolean qui dit si l'utilisateur a donné le nom de l'image d'entrée
   int int_aDonneNomSortie; //boolean qui dit si l'utilisateur a donné le nom de l'image de sortie
   int int_aDonneSeuil; //boolean qui dit si l'utilisateur a donné le nom de l'image de sortie
+  FILE *file_imageEntree; //le fichier qui sera traité en entrée
+  FILE *file_imageSortie; //le fichier qui sera traité en entrée
+  int int_i; //va parcourir tous les indices du tableau des arguments (argv)
 
   //INITIALISATION DES VARIABLES
   //On considère au début que l'image est en couleur
@@ -36,9 +40,8 @@ int main (int argc, char** argv){
   int_aDonneNomSortie = 0;
   int_aDonneSeuil = 0;
 
-
-  for(int_i ; int_i < argc ; int_i++){
-    if(strcmp(argv[int_i], "-in")){
+  for(int_i = 1 ; int_i < argc ; int_i++){
+    if(!strcmp(argv[int_i], "-in")){
       int_i++;
       if(int_i < argc){
         tchar_nomImageEntree = argv[int_i];
@@ -46,7 +49,7 @@ int main (int argc, char** argv){
       }
     }
     else{
-      if(strcmp(argv[int_i], "-out")){
+      if(!strcmp(argv[int_i], "-out")){
         int_i++;
         if(int_i < argc){
           tchar_nomImageSortie = argv[int_i];
@@ -54,14 +57,14 @@ int main (int argc, char** argv){
         }
       }
       else{
-        if(strcmp(argv[int_i], "-gris")){
+        if(!strcmp(argv[int_i], "-gris")){
           int_estGris = 1;
         }
         else{
-          if(strcmp(argv[int_i], "-seuil")){
+          if(!strcmp(argv[int_i], "-seuil")){
             int_i++;
             if(int_i < argc){
-              int_seuil = argv[int_i];
+              int_seuil = atoi(argv[int_i]);
               int_aDonneSeuil = 1;
             }
           }
@@ -70,8 +73,23 @@ int main (int argc, char** argv){
     }
   }
 
-  //INITIALISATION DE L'ECRAN
-  system("clear");
+  if(int_aDonneNomEntree && int_aDonneNomSortie){
+    //CHARGER LE FICHIER D'ENTREE ET DE SORTIE
+    file_imageEntree = chargerFichier(tchar_nomImageEntree, "r");
+    file_imageSortie = chargerFichier(tchar_nomImageSortie, "w");
+    //executer la methode qui convertie l'image en gris
+    enGris(file_imageEntree, file_imageSortie);
+
+    //FERMER LE FULX DES FICHIERS
+    fclose(file_imageEntree);
+    fclose(file_imageSortie);
+  }
+  //sinon, si aucune entrée ou aucune sortie n'a été donné
+  else{
+    //afficher un message pour expliquer comment utiliser le programme
+    printf("Veuillez donner une entrée et une sortie\n\t-in ./chemain/de/l-image.ppm\n\t-out ./chemain/de/l-image.ppm\noptionel :\n\t-gris : si l'image est déjà grise\n\t-seuil nbr : pour définir un seuil de gris a considéré comme noir\n");
+  }
+
 
   //Fin du programme, Il se termine normalement, et donc retourne 0
   return(0);
