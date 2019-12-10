@@ -21,7 +21,7 @@
 #define ERREUR_SYS -1
 
 /*! \struct sPixel
- * Structure qui défini les nuances de couleurs primaires d'un pixel
+ * Structure qui déclare les nuances de couleurs primaires d'un pixel
  * \remark le taux de rouge vert et bleu varie entre 0 et 255 inclus
  */
 typedef struct{
@@ -29,20 +29,6 @@ typedef struct{
   int int_v; /*!< Taux de vers */
   int int_b; /*!< Taux de bleu */
 } sPixel;
-
-/*
-typedef struct{
-  FILE* image;
-} sImagePPM;
-
-typedef struct{
-  FILE* image;
-} sImagePGM;
-
-typedef struct{
-  FILE* image;
-} sImagePBM;
-*/
 
 /*!
 \fn FILE *chargerFichier(char *tchar_nomFichier, char *droits)
@@ -57,6 +43,17 @@ typedef struct{
 FILE *chargerFichier(char *tchar_nomFichier, char *droits);
 
 /*!
+\fn void copierEntete(FILE *file_imageEntree, FILE *file_imageSortie)
+\author Jalbert Sylvain
+\version 0.1 Premier jet
+\date 09 decembre 2019
+\brief la procedure qui l'entete du fichier d'entrée dans l'éntete du fichier de sortie
+\param tchar_imageEntree le nom du de l'image d'entrée
+\param tchar_imageSortie le nom du de l'image de sortie, qui condiendra le résultat
+*/
+void copierEntete(FILE *file_imageEntree, FILE *file_imageSortie);
+
+/*!
 \fn void enGris(FILE *file_imageEntree, FILE *file_imageSortie)
 \author Jalbert Sylvain
 \version 0.1 Premier jet
@@ -66,5 +63,17 @@ FILE *chargerFichier(char *tchar_nomFichier, char *droits);
 \param tchar_imageSortie le nom du de l'image de sortie, qui condiendra le résultat
 */
 void enGris(FILE *file_imageEntree, FILE *file_imageSortie);
+
+/*!
+\fn void enGris(FILE *file_imageEntree, FILE *file_imageSortie)
+\author Jalbert Sylvain
+\version 0.1 Premier jet
+\date 09 decembre 2019
+\brief la procedure qui convertie une image grise en noir et blanc grâce à un seuil donné
+\param tchar_imageEntree le nom du de l'image d'entrée
+\param tchar_imageSortie le nom du de l'image de sortie, qui condiendra le résultat
+\param int_seuil le suil à partir du quel on dit que c'est un pixel blanc. En dessous c'est un pixel noir.
+*/
+void enNoirEtBlanc(FILE *file_imageEntree, FILE *file_imageSortie, int int_seuil);
 
 #endif
