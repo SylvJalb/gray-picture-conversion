@@ -8,8 +8,15 @@ COMPILATION
 
 EXECUTION
 
-  Pour executer le programme, il faut executer la commande suivante :
+  Pour executer le programme, et afficher l'aide, il faut executer la commande suivante :
     ./image
+
+  Sinon, pour tester le programme, il suffi d'executer dabor cette comande pour générer une image en gris à partir d'une en couleur :
+    ./image -in ./images/windows.ppm -out ./images/windowsRes.ppm -gris
+
+  Puis cette comande génèrera une image en noir et blanc à partir de l'image en gris généré précédemment et d'un seuil donné.
+  (on peut aussi faire à partir d'une image en couleur)
+    ./image -in ./images/windowsRes.ppm -out ./images/windowsResNB.ppm -seuil 125
 
 DOCUMENTATION
 
