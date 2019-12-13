@@ -12,11 +12,10 @@ EXECUTION
     ./image
 
   Sinon, pour tester le programme, il suffi d'executer dabor cette comande pour générer une image en gris à partir d'une en couleur :
-    ./image -in ./images/windows.ppm -out ./images/windowsRes.ppm -gris
+    ./image -in ./images/windows.ppm -out ./images/windowsRes.pgm -gris
 
   Puis cette comande génèrera une image en noir et blanc à partir de l'image en gris généré précédemment et d'un seuil donné.
-  (on peut aussi faire à partir d'une image en couleur)
-    ./image -in ./images/windowsRes.ppm -out ./images/windowsResNB.ppm -seuil 125
+    ./image -in ./images/windowsRes.pgm -out ./images/windowsRes.pbm -seuil 150
 
 DOCUMENTATION
 

@@ -14,21 +14,44 @@
 #include <string.h>
 #include <errno.h>
 
+#include "tableau.h"
+
 /*! \def ERREUR_SYS
  *  Constante pour définir une terminaison par erreur
  *  système
  */
 #define ERREUR_SYS -1
 
-/*! \struct sPixel
- * Structure qui déclare les nuances de couleurs primaires d'un pixel
- * \remark le taux de rouge vert et bleu varie entre 0 et 255 inclus
+
+/*! \struct sImagePPM
+ * Structure qui déclare une image .ppm
  */
 typedef struct{
-  int int_r; /*!< Taux de rouge */
-  int int_v; /*!< Taux de vers */
-  int int_b; /*!< Taux de bleu */
-} sPixel;
+  int int_largeur; /*!< largeur de l'image en pixel */
+  int int_longueur; /*!< longueur de l'image en pixel */
+  int int_max; /*!< le maximum qu'une couleur peut prendre comme valeur */
+  sPixel *tsPixel_pixels; /*!< Matrice de pixel de couleurs */
+} sImagePPM;
+
+/*! \struct sImagePGM
+ * Structure qui déclare une image .pgm
+ */
+typedef struct{
+  int int_largeur; /*!< largeur de l'image en pixel */
+  int int_longueur; /*!< longueur de l'image en pixel */
+  int int_max; /*!< le maximum qu'une couleur peut prendre comme valeur */
+  int *tint_pixels; /*!< Matrice de pixel gris */
+} sImagePGM;
+
+/*! \struct sImagePBM
+ * Structure qui déclare une image .pbm
+ */
+typedef struct{
+  int int_largeur; /*!< largeur de l'image en pixel */
+  int int_longueur; /*!< longueur de l'image en pixel */
+  int int_max; /*!< le maximum qu'une couleur peut prendre comme valeur */
+  int *tint_pixels; /*!< Matrice de pixel noir et blanc (boolean) */
+} sImagePBM;
 
 /*!
 \fn FILE *chargerFichier(char *tchar_nomFichier, char *droits)
@@ -43,37 +66,70 @@ typedef struct{
 FILE *chargerFichier(char *tchar_nomFichier, char *droits);
 
 /*!
-\fn void copierEntete(FILE *file_imageEntree, FILE *file_imageSortie)
+\fn sImagePPM *chargerImagePPM(char *tchar_nomFichier)
 \author Jalbert Sylvain
 \version 0.1 Premier jet
-\date 09 decembre 2019
-\brief la procedure qui l'entete du fichier d'entrée dans l'éntete du fichier de sortie
-\param tchar_imageEntree le nom du de l'image d'entrée
-\param tchar_imageSortie le nom du de l'image de sortie, qui condiendra le résultat
+\date 02 decembre 2019
+\brief la fonction qui charge une image PPM
+\param tchar_nomFichier le nom du fichier à ouvrir
+\return le pointeur vers la structure créé
 */
-void copierEntete(FILE *file_imageEntree, FILE *file_imageSortie);
+sImagePPM *chargerImagePPM(char *tchar_nomFichier);
 
 /*!
-\fn void enGris(FILE *file_imageEntree, FILE *file_imageSortie)
+\fn sImagePGM *chargerImagePGM(char *tchar_nomFichier)
 \author Jalbert Sylvain
 \version 0.1 Premier jet
-\date 09 decembre 2019
-\brief la procedure qui convertie une image en couleur en image en gris
-\param tchar_imageEntree le nom du de l'image d'entrée
-\param tchar_imageSortie le nom du de l'image de sortie, qui condiendra le résultat
+\date 02 decembre 2019
+\brief la fonction qui charge une image PGM
+\param tchar_nomFichier le nom du fichier à ouvrir
+\return le pointeur vers la structure créé
 */
-void enGris(FILE *file_imageEntree, FILE *file_imageSortie);
+sImagePGM *chargerImagePGM(char *tchar_nomFichier);
 
 /*!
-\fn void enGris(FILE *file_imageEntree, FILE *file_imageSortie)
+\fn sImagePGM *enGris(sImagePPM *sImagePPM_imageCouleur)
 \author Jalbert Sylvain
 \version 0.1 Premier jet
 \date 09 decembre 2019
-\brief la procedure qui convertie une image grise en noir et blanc grâce à un seuil donné
-\param tchar_imageEntree le nom du de l'image d'entrée
-\param tchar_imageSortie le nom du de l'image de sortie, qui condiendra le résultat
+\brief la fonction qui convertie une image en couleur en image en gris
+\param sImagePPM_imageCouleur l'image en couleur
+\return l'image PGM (en gris)
+*/
+sImagePGM *enGris(sImagePPM *sImagePPM_imageCouleur);
+
+/*!
+\fn sImagePBM *enNoirEtBlanc(sImagePGM *sImagePGM_imageGrise, int int_seuil)
+\author Jalbert Sylvain
+\version 0.1 Premier jet
+\date 09 decembre 2019
+\brief la fonction qui convertie une image grise en noir et blanc grâce à un seuil donné
+\param sImagePGM_imageGrise une image grise a convertir en noir et blanc
 \param int_seuil le suil à partir du quel on dit que c'est un pixel blanc. En dessous c'est un pixel noir.
+\return une image PBM
 */
-void enNoirEtBlanc(FILE *file_imageEntree, FILE *file_imageSortie, int int_seuil);
+sImagePBM *enNoirEtBlanc(sImagePGM *sImagePGM_imageGrise, int int_seuil);
+
+/*!
+\fn void enregistrerImagePGM(sImagePGM *sImagePGM_image, char *tchar_nomFichier)
+\author Jalbert Sylvain
+\version 0.1 Premier jet
+\date 13 decembre 2019
+\brief la procedure qui enregistre une image grise PGM
+\param sImagePGM_image l'image à enregistrer
+\param tchar_nomFichier le nom du fichier à ouvrir
+*/
+void enregistrerImagePGM(sImagePGM *sImagePGM_image, char *tchar_nomFichier);
+
+/*!
+\fn void enregistrerImagePBM(sImagePBM *sImagePBM_image, char *tchar_nomFichier)
+\author Jalbert Sylvain
+\version 0.1 Premier jet
+\date 13 decembre 2019
+\brief la procedure qui enregistre une image noire et blanche PBM (binaire)
+\param sImagePBM_image l'image à enregistrer
+\param tchar_nomFichier le nom du fichier à ouvrir
+*/
+void enregistrerImagePBM(sImagePBM *sImagePBM_image, char *tchar_nomFichier);
 
 #endif
